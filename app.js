@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const graphQlSchema = require("./graphql/schema/index");
 const graphQlResolvers = require("./graphql/resolvers/index");
-
+const isAuth = require("./middleware/is-auth");
 var app = express();
 
 app.use(bodyParser.json());
@@ -18,11 +18,14 @@ app.get("/", (_req, res) => {
 });
 
 // Create and use the GraphQL handler.
+app.use(isAuth);
+
 app.all(
   "/graphql",
   createHandler({
     schema: graphQlSchema,
     rootValue: graphQlResolvers,
+    context: (req, res) => ({ req }),
   })
 );
 
