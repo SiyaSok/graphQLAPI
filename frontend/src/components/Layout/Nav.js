@@ -75,7 +75,7 @@ export default function Nav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className='bg-sky-700'>
+    <header className='bg-sky-600'>
       <nav
         className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'
         aria-label='Global'>

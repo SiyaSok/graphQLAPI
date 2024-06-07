@@ -1,17 +1,17 @@
 /** @format */
 
 import { Outlet } from "react-router-dom";
-import Nav from "./Nav";
-import Hero from "../pages/Hero";
+import Nav from "../components/Layout/Nav";
+import Footer from "../components/Layout/Footer";
 
 export default function Root() {
   return (
     <>
       <Nav />
-      {/* <Hero /> */}
       <div id='detail'>
         <Outlet />
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,3 +1,5 @@
+/** @format */
+
 var express = require("express");
 var { createHandler } = require("graphql-http/lib/use/express");
 var { ruruHTML } = require("ruru/server");
@@ -40,4 +42,4 @@ async function main() {
 }
 
 // Start the server at port
-app.listen(3000);
+app.listen(5000);
