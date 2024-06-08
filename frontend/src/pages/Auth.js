@@ -2,14 +2,16 @@
 
 import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
+import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 const Auth = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    //name: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    terms: false,
+    //confirmPassword: "",
+    //terms: false,
   });
 
   const handleChange = (e) => {
@@ -20,18 +22,52 @@ const Auth = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+
+    const data = JSON.stringify({
+      query: `
+    query {
+      login(email: "${formData.email}", password: "${formData.password}") {
+        token
+        tokenExpiration
+        userId
+      }
+    }
+  `,
+    });
+
+    const config = {
+      method: "POST",
+      url: "graphql",
+      headers: {
+        "Accept-Language": "en-US,en;q=0.9",
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+
+      if (response.data.data.login.token) {
+        return <Navigate to='/events' />;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     console.log(formData);
   };
 
   return (
     <div className='flex items-center justify-center  mt-9 p-6 '>
       <div className='w-full max-w-md p-8 rounded-lg shadow-lg  bg-gray-100'>
-        <h2 className='mb-6 text-2xl font-bold text-center'>Register</h2>
+        {/* <h2 className='mb-6 text-2xl font-bold text-center'>Register</h2> */}
+        <h2 className='mb-6 text-2xl font-bold text-center'>Sign in</h2>
+
         <form onSubmit={handleSubmit}>
-          <div className='mb-4'>
+          {/* <div className='mb-4'>
             <label
               htmlFor='name'
               className='block text-sm font-medium text-gray-700'>
@@ -46,7 +82,7 @@ const Auth = () => {
               value={formData.name}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
           <div className='mb-4'>
             <label
               htmlFor='email'
@@ -79,7 +115,7 @@ const Auth = () => {
               onChange={handleChange}
             />
           </div>
-          <div className='mb-4'>
+          {/* <div className='mb-4'>
             <label
               htmlFor='confirmPassword'
               className='block text-sm font-medium text-gray-700'>
@@ -94,8 +130,8 @@ const Auth = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
             />
-          </div>
-          <div className='flex items-center justify-between mb-4'>
+          </div> */}
+          {/* <div className='flex items-center justify-between mb-4'>
             <div className='flex items-center'>
               <input
                 id='terms'
@@ -114,19 +150,26 @@ const Auth = () => {
                 </a>
               </label>
             </div>
-          </div>
+          </div> */}
           <div>
             <button
               type='submit'
               className='flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-sky-600 border border-transparent rounded-md shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
-              Register
+              Sign in
             </button>
           </div>
         </form>
-        <p className='mt-4 text-sm text-center text-gray-600'>
+        {/* <p className='mt-4 text-sm text-center text-gray-600'>
           Already have an account?{" "}
           <a href='/' className='text-sky-600 hover:text-sky-500'>
             Sign in
+          </a>
+        </p> */}
+
+        <p className='mt-4 text-sm text-center text-gray-600'>
+          I don't have an account?{" "}
+          <a href='/' className='text-sky-600 hover:text-sky-500'>
+            Register
           </a>
         </p>
       </div>

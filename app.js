@@ -14,12 +14,32 @@ var app = express();
 app.use(bodyParser.json());
 
 // Serve the GraphiQL IDE.
-app.get("/", (_req, res) => {
-  res.type("html");
-  res.end(ruruHTML({ endpoint: "/graphql" }));
-});
+// app.get("/", (_req, res) => {
+//   res.type("html");
+//   res.end(ruruHTML({ endpoint: "/graphql" }));
+// });
 
 // Create and use the GraphQL handler.
+
+app.use((req, res, next) => {
+  // Allow all origins to access this server
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  // Allow specific HTTP methods for CORS
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+
+  // Allow specific headers for CORS
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  // Proceed to the next middleware
+  next();
+});
+
 app.use(isAuth);
 
 app.all(
@@ -37,8 +57,6 @@ async function main() {
   await mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@thecolourbql.mjva94l.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority&appName=TheColourBql`
   );
-
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
 // Start the server at port
