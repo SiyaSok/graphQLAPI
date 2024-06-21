@@ -1,3 +1,5 @@
+/** @format */
+
 const bcrypt = require("bcrypt");
 const User = require("../../models/user");
 var jwt = require("jsonwebtoken");

@@ -14,10 +14,10 @@ var app = express();
 app.use(bodyParser.json());
 
 // Serve the GraphiQL IDE.
-// app.get("/", (_req, res) => {
-//   res.type("html");
-//   res.end(ruruHTML({ endpoint: "/graphql" }));
-// });
+app.get("/", (_req, res) => {
+  res.type("html");
+  res.end(ruruHTML({ endpoint: "/graphql" }));
+});
 
 // Create and use the GraphQL handler.
 

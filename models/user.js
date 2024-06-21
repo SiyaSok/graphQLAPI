@@ -1,3 +1,5 @@
+/** @format */
+
 const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 
@@ -18,6 +20,10 @@ const userSchema = new Schema({
       ref: "Event",
     },
   ],
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User-info",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -8,9 +8,10 @@ import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import Contact from "./routes/contact";
 import Auth from "./pages/Auth";
-import Events from "./pages/Events";
+import Events, { eventsLoader } from "./pages/Events";
 import Bookings from "./pages/Bookings";
 
+// Define your router configuration
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       {
         path: "events",
         element: <Events />,
+        loader: eventsLoader,
       },
       {
         path: "bookings",

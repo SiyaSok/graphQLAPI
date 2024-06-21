@@ -1,72 +1,23 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import "tailwindcss/tailwind.css";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const Auth = () => {
-  const [formData, setFormData] = useState({
-    //name: "",
-    email: "",
-    password: "",
-    //confirmPassword: "",
-    //terms: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = JSON.stringify({
-      query: `
-    query {
-      login(email: "${formData.email}", password: "${formData.password}") {
-        token
-        tokenExpiration
-        userId
-      }
-    }
-  `,
-    });
-
-    const config = {
-      method: "POST",
-      url: "graphql",
-      headers: {
-        "Accept-Language": "en-US,en;q=0.9",
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-
-    try {
-      const response = await axios.request(config);
-
-      if (response.data.data.login.token) {
-        return <Navigate to='/events' />;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    console.log(formData);
-  };
+  const { onLogIn, formData, getUserCredentials, isSignedUp, setIsSignedUp } =
+    useContext(AuthContext);
 
   return (
     <div className='flex items-center justify-center  mt-9 p-6 '>
       <div className='w-full max-w-md p-8 rounded-lg shadow-lg  bg-gray-100'>
         {/* <h2 className='mb-6 text-2xl font-bold text-center'>Register</h2> */}
-        <h2 className='mb-6 text-2xl font-bold text-center'>Sign in</h2>
-
-        <form onSubmit={handleSubmit}>
+        {isSignedUp ? (
+          <h2 className='mb-6 text-2xl font-bold text-center'>Sign In</h2>
+        ) : (
+          <h2 className='mb-6 text-2xl font-bold text-center'>Sign Up</h2>
+        )}
+        <form onSubmit={onLogIn}>
           {/* <div className='mb-4'>
             <label
               htmlFor='name'
@@ -96,7 +47,7 @@ const Auth = () => {
               className='block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm'
               placeholder='john@example.com'
               value={formData.email}
-              onChange={handleChange}
+              onChange={getUserCredentials}
             />
           </div>
           <div className='mb-4'>
@@ -112,7 +63,7 @@ const Auth = () => {
               className='block w-full px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm'
               placeholder='••••••••'
               value={formData.password}
-              onChange={handleChange}
+              onChange={getUserCredentials}
             />
           </div>
           {/* <div className='mb-4'>
@@ -155,23 +106,30 @@ const Auth = () => {
             <button
               type='submit'
               className='flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-sky-600 border border-transparent rounded-md shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'>
-              Sign in
+              {isSignedUp ? "Sign In" : "Sign Up"}
             </button>
           </div>
         </form>
-        {/* <p className='mt-4 text-sm text-center text-gray-600'>
-          Already have an account?{" "}
-          <a href='/' className='text-sky-600 hover:text-sky-500'>
-            Sign in
-          </a>
-        </p> */}
-
-        <p className='mt-4 text-sm text-center text-gray-600'>
-          I don't have an account?{" "}
-          <a href='/' className='text-sky-600 hover:text-sky-500'>
-            Register
-          </a>
-        </p>
+        {isSignedUp ? (
+          <p className='mt-4 text-sm text-center text-gray-600'>
+            Don't have an account?
+            <span
+              onClick={() => setIsSignedUp(false)}
+              className='text-sky-600 hover:text-sky-500 cursor-pointer ml-1'>
+              Register
+            </span>
+          </p>
+        ) : (
+          <p className='mt-4 text-sm text-center text-gray-600'>
+            Already have an account?{" "}
+            <span
+              onClick={() => setIsSignedUp(true)}
+              className='text-sky-600 hover:text-sky-500 cursor-pointer ml-1'>
+              {" "}
+              Sign in
+            </span>
+          </p>
+        )}
       </div>
     </div>
   );
