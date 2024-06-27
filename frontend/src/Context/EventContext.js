@@ -2,7 +2,6 @@
 
 import axios from "axios";
 import { createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const EventContext = createContext();
 
@@ -10,10 +9,6 @@ const EventsContextProvider = ({ children }) => {
   const [EventsData, setEventsData] = useState({});
 
   const getAllEvents = async (e) => {
-    // e.preventDefault();
-
-    console.log("working");
-
     const data = JSON.stringify({
       query:
         "query { events { _id date description price title creator { email  } } }",
@@ -31,7 +26,6 @@ const EventsContextProvider = ({ children }) => {
 
     try {
       const response = await axios.request(config);
-
       setEventsData(response.data.data);
       console.log(response.data.data);
     } catch (error) {

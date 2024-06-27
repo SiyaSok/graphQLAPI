@@ -1,3 +1,5 @@
+/** @format */
+
 const Event = require("../../models/event");
 const User = require("../../models/user");
 
@@ -25,6 +27,9 @@ module.exports = {
       description: args.eventInput.description,
       price: +args.eventInput.price,
       date: dateToString(args.eventInput.date),
+      venue: args.eventInput.venue,
+      categories: args.eventInput.categories,
+      eventImage: args.eventInput.eventImage,
       creator: raw.userId,
     });
     let createdEvent;

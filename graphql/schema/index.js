@@ -1,3 +1,5 @@
+/** @format */
+
 var { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
@@ -15,6 +17,7 @@ type Event {
   title:String!
   description: String!
   price:Float!
+  eventImage:String
   date:String!
   creator: User!
 }
@@ -27,21 +30,38 @@ type AuthData {
 
 type User {
   _id:ID!
+  userImage:String!
+  firstName:String!
+  lastName:String!
+  phoneNumber:String!
+  company:String
+  website:String
   email:String!
   password:String
   createdEvents:[Event!]
 }
 
 input UserInput {
-  email:String!
-  password: String!
+UserName:String!
+userImage:String!
+firstName:String!
+lastName:String!
+phoneNumber:String!
+company:String
+website:String
+email:String!
+password: String!
+terms:String!
 }
 
 input EventInput {
   title:String!
   description: String!
+  eventImage:String
   price:Float!
   date:String!
+  venue:String!
+  categories:String!
 }
 
 type RootQuery {

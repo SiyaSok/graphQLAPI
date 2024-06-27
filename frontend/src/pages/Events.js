@@ -51,11 +51,6 @@ export const eventsLoader = async () => {
 
   try {
     const response = await axios.request(config);
-
-    // if (response.data.errors) {
-    //   throw new Error(response.data.errors[0].message);
-    // }
-
     return response.data.data.events;
   } catch (error) {
     console.log(error);
