@@ -12,13 +12,25 @@ const AuthContextProvider = ({ children }) => {
 
   const [formData, setFormData] = useState({
     email: "",
+    userImage: "",
     password: "",
+    UserName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    company: "",
+    website: "",
+    confirmPassword: "",
+    terms: false,
   });
 
   const [isSignedUp, setIsSignedUp] = useState(true);
 
   const getUserCredentials = (e) => {
     const { name, value, type, checked } = e.target;
+
+    console.log(name, value, type, checked);
+
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -27,8 +39,6 @@ const AuthContextProvider = ({ children }) => {
 
   const onLogIn = async (e) => {
     e.preventDefault();
-
-    console.log("working");
 
     const data = JSON.stringify({
       query: `
@@ -55,12 +65,35 @@ const AuthContextProvider = ({ children }) => {
     try {
       const response = await axios.request(config);
       const { token } = response.data.data.login;
-
-      console.log(token);
-
       if (token) {
         navigate("/events"); // Redirect using useNavigate
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const register = async (e) => {
+    e.preventDefault();
+
+    const data = JSON.stringify({
+      query: `mutation MyMutation { createUser( userInput: { UserName: "${formData.UserName}", userImage:"${formData.userImage}", firstName: "${formData.firstName}", lastName: "${formData.lastName}", phoneNumber: "${formData.phoneNumber}", email: "${formData.email}", password: "${formData.password}", terms: "${formData.terms}", company: "${formData.company}", website: "${formData.website}" }) { _id company email firstName lastName password phoneNumber userImage website } }`,
+    });
+
+    const config = {
+      method: "POST",
+      url: "graphql",
+      headers: {
+        "Accept-Language": "en-US,en;q=0.9",
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+
+      console.log("response", response);
     } catch (error) {
       console.log(error);
     }
@@ -74,6 +107,7 @@ const AuthContextProvider = ({ children }) => {
         formData,
         isSignedUp,
         setIsSignedUp,
+        register,
       }}>
       {children}
     </AuthContext.Provider>
