@@ -1,3 +1,5 @@
+/** @format */
+
 const Booking = require("../../models/booking");
 const Event = require("../../models/event");
 

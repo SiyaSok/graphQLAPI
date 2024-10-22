@@ -8,8 +8,12 @@ import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import Contact from "./routes/contact";
 import Auth from "./pages/Auth";
-import Events, { eventsLoader } from "./pages/Events";
 import Bookings from "./pages/Bookings";
+import Hero from "./components/Hero";
+import AccountInfo, { profileLoader } from "./pages/AccountInfo";
+import AddEvent from "./pages/Events/AddEvent";
+import Events from "./pages/Events/Events";
+import EventsList, { eventsLoader } from "./pages/Events/EventsList";
 
 // Define your router configuration
 const router = createBrowserRouter([
@@ -18,6 +22,10 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        index: true, // This will act as the default child for "/"
+        element: <Hero />,
+      },
       {
         path: "contacts/:contactId",
         element: <Contact />,
@@ -29,11 +37,26 @@ const router = createBrowserRouter([
       {
         path: "events",
         element: <Events />,
-        loader: eventsLoader,
+        children: [
+          {
+            path: "event-list",
+            element: <EventsList />,
+            loader: eventsLoader,
+          },
+          {
+            path: "add-event",
+            element: <AddEvent />,
+          },
+        ],
       },
       {
         path: "bookings",
         element: <Bookings />,
+      },
+      {
+        path: "account",
+        element: <AccountInfo />,
+        loader: profileLoader,
       },
     ],
   },

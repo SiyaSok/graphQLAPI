@@ -26,14 +26,12 @@ module.exports = {
   },
   login: async ({ email, password }) => {
     const user = await User.findOne({ email: email });
-
     if (!user) {
       throw new Error(
         `A user with this email ${email} doesn't exist.Please regster`
       );
     }
     const isEqual = await bcrypt.compare(password, user.password);
-
     if (!isEqual) {
       throw new Error(`The password provided is incorrent, Please try again.`);
     }
@@ -48,5 +46,14 @@ module.exports = {
       token: token,
       tokenExpiration: 1,
     };
+  },
+  getUser: async ({ id }) => {
+    const user = await User.findOne({ id });
+    if (!user) {
+      throw new Error(
+        `A user with this email ${email} doesn't exist.Please regster`
+      );
+    }
+    return user;
   },
 };

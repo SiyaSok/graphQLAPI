@@ -1,3 +1,5 @@
+/** @format */
+
 var jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {

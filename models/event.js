@@ -15,7 +15,26 @@ const eventSchema = new Schema({
   price: {
     type: Number,
     required: true,
+<<<<<<< Updated upstream
   },
+=======
+    trim: true,
+  },
+  eventImage: {
+    type: String,
+    trim: true,
+  },
+  // venue: {
+  //   type: String,
+  //   required: true,
+  //   trim: true,
+  // },
+  // categories: {
+  //   type: String,
+  //   required: true,
+  //   trim: true,
+  // },
+>>>>>>> Stashed changes
   date: {
     type: Date,
     required: true,

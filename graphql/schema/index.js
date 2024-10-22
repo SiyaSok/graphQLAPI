@@ -19,11 +19,6 @@ type Event {
   creator: User!
 }
 
-type AuthData {
-  userId : ID!
-  token: String!
-  tokenExpiration:Int!
-}
 
 type User {
   _id:ID!
@@ -31,10 +26,30 @@ type User {
   password:String
   createdEvents:[Event!]
 }
+type AuthData {
+  userId : ID!
+  token: String!
+  tokenExpiration:Int!
+   creator: User!
+}
 
 input UserInput {
+<<<<<<< Updated upstream
   email:String!
   password: String!
+=======
+UserName:String!
+userImage:String!
+firstName:String!
+lastName:String!
+phoneNumber:String!
+company:String
+website:String
+email:String!
+password: String!
+terms:String!
+
+>>>>>>> Stashed changes
 }
 
 input EventInput {
@@ -48,6 +63,7 @@ type RootQuery {
   events: [Event!]!
   bookings : [Booking!]!
   login(email:String!,password:String!):AuthData
+  getUser(userID:ID!):User
 }
 type RootMutation {
   createEvent(eventInput:EventInput):Event

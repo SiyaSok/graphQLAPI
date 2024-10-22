@@ -1,6 +1,6 @@
 /** @format */
 
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import {
@@ -16,12 +16,8 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
   FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -29,37 +25,20 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
+import { AuthContext } from "../../Context/AuthContext";
 
-const products = [
+const Events = [
   {
-    name: "Analytics",
+    name: "Events",
     description: "Get a better understanding of your traffic",
-    href: "#",
-    icon: ChartPieIcon,
-  },
-  {
-    name: "Engagement",
-    description: "Speak directly to your customers",
-    href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers’ data will be safe and secure",
-    href: "#",
+    href: "/events/event-list",
     icon: FingerPrintIcon,
   },
   {
-    name: "Integrations",
-    description: "Connect with third-party tools",
-    href: "#",
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will convert",
-    href: "#",
-    icon: ArrowPathIcon,
+    name: "Add a event",
+    description: "Get a better understanding of your traffic",
+    href: "/events/add-event",
+    icon: FingerPrintIcon,
   },
 ];
 const callsToAction = [
@@ -72,10 +51,24 @@ function classNames(...classes) {
 }
 
 export default function Nav() {
+  const {
+    onLogIn,
+    formData,
+    getUserCredentials,
+    isSignedUp,
+    setIsSignedUp,
+    register,
+    onLoad,
+    setFormData,
+    onError,
+  } = useContext(AuthContext);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  console.log({ isSignedUp });
+
   return (
-    <header className='bg-sky-600'>
+    <header className='relative z-20 bg-gray-900 '>
       <nav
         className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'
         aria-label='Global'>
@@ -98,10 +91,11 @@ export default function Nav() {
             <Bars3Icon className='h-6 w-6' aria-hidden='true' />
           </button>
         </div>
+
         <PopoverGroup className='hidden lg:flex lg:gap-x-12'>
           <Popover className='relative'>
             <PopoverButton className='flex text-white items-center gap-x-1 text-sm font-semibold leading-6 text-white'>
-              Product
+              Events
               <ChevronDownIcon
                 className='h-5 w-5 flex-none text-white-400'
                 aria-hidden='true'
@@ -117,31 +111,31 @@ export default function Nav() {
               leaveTo='opacity-0 translate-y-1'>
               <PopoverPanel className='absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5'>
                 <div className='p-4'>
-                  {products.map((item) => (
+                  {Events.map((item) => (
                     <div
                       key={item.name}
                       className='group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50'>
-                      <div className='flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white'>
+                      {/* <div className='flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white'>
                         <item.icon
                           className='h-6 w-6 text-white-600 group-hover:text-indigo-600'
                           aria-hidden='true'
                         />
-                      </div>
+                      </div> */}
                       <div className='flex-auto'>
                         <Link
-                          to={`/`}
-                          className='block font-semibold text-white'>
+                          to={item.href}
+                          className='block font-semibold text-black'>
                           {item.name}
                           <span className='absolute inset-0' />
                         </Link>
-                        <p className='mt-1 text-white-600'>
+                        <p className='mt-1 text-black-600'>
                           {item.description}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className='grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50'>
+                {/* <div className='grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50'>
                   {callsToAction.map((item) => (
                     <Link
                       to={`/`}
@@ -155,15 +149,15 @@ export default function Nav() {
                       {item.name}
                     </Link>
                   ))}
-                </div>
+                </div> */}
               </PopoverPanel>
             </Transition>
           </Popover>
-          <Link
+          {/* <Link
             to={`/events`}
-            className='text-sm font-semibold leading-6 text-white'>
+            className='text-sm font-semibold leading-6 text-white'>z
             Events
-          </Link>
+          </Link> */}
           <Link
             to={`/bookings`}
             className='text-sm font-semibold leading-6 text-white'>
@@ -173,12 +167,31 @@ export default function Nav() {
             Company
           </Link>
         </PopoverGroup>
+
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <Link
-            to={`/auth`}
-            className='text-sm font-semibold leading-6 text-white'>
-            Log in <span aria-hidden='true'>&rarr;</span>
-          </Link>
+          {isSignedUp && (
+            <Link
+              to={`/account`}
+              className='text-sm font-semibold leading-6 text-white'>
+              Account <span className='m-2' aria-hidden='true'></span>
+            </Link>
+          )}
+          {isSignedUp ? (
+            <p
+              onClick={() => setIsSignedUp(false)}
+              to={`/account`}
+              className='text-sm font-semibold leading-6 text-white ml-2'>
+              Log out
+              <span aria-hidden='true'>&rarr;</span>
+            </p>
+          ) : (
+            <Link
+              to={`/account`}
+              className='text-sm font-semibold leading-6 text-white ml-2'>
+              Log in
+              <span aria-hidden='true'> &rarr;</span>
+            </Link>
+          )}
         </div>
       </nav>
       <Dialog
@@ -211,7 +224,7 @@ export default function Nav() {
                   {({ open }) => (
                     <>
                       <DisclosureButton className='flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-white hover:bg-gray-50'>
-                        Product
+                        {/* Events */}
                         <ChevronDownIcon
                           className={classNames(
                             open ? "rotate-180" : "",
@@ -221,7 +234,7 @@ export default function Nav() {
                         />
                       </DisclosureButton>
                       <DisclosurePanel className='mt-2 space-y-2'>
-                        {[...products, ...callsToAction].map((item) => (
+                        {[...Events, ...callsToAction].map((item) => (
                           <DisclosureButton
                             key={item.name}
                             as='a'
@@ -251,6 +264,13 @@ export default function Nav() {
                   to={`/`}
                   className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-50'>
                   Company
+                </Link>
+              </div>
+              <div className='py-6'>
+                <Link
+                  to={`/auth`}
+                  className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-50'>
+                  Account
                 </Link>
               </div>
               <div className='py-6'>

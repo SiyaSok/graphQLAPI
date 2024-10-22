@@ -1,3 +1,5 @@
+/** @format */
+
 const authResolver = require("./auth.js");
 const eventResolver = require("./events.js");
 const bookingResolver = require("./booking.js");

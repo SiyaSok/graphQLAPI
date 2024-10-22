@@ -16,6 +16,9 @@ module.exports = {
     }
   },
   createEvent: async (args, context) => {
+    console.log({ context });
+    console.log({ args });
+
     const { raw } = context.req;
     if (!raw.isAuth) {
       throw new Error(`Unauthenticated user!!`);
@@ -25,6 +28,10 @@ module.exports = {
       description: args.eventInput.description,
       price: +args.eventInput.price,
       date: dateToString(args.eventInput.date),
+<<<<<<< Updated upstream
+=======
+      eventImage: args.eventInput.eventImage,
+>>>>>>> Stashed changes
       creator: raw.userId,
     });
     let createdEvent;
